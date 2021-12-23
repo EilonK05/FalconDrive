@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Chassis;
 
@@ -25,13 +26,21 @@ public class TankDrive extends CommandBase {
   @Override
   public void execute() {
     if (RobotContainer.rightJoystick.getY() > 0.1 || RobotContainer.rightJoystick.getY() < -0.1) {
-      chassis.setRightPower(RobotContainer.rightJoystick.getY());
+      if (RobotContainer.rightJoystick.getRawButtonPressed(1)){
+        chassis.setRightPower(RobotContainer.rightJoystick.getY() * 0.33);
+      }else{
+        chassis.setRightPower(RobotContainer.rightJoystick.getY());
+      }
     } else {
       chassis.setRightPower(0);
     }
 
     if (RobotContainer.leftJoystick.getY() > 0.1 || RobotContainer.leftJoystick.getY() < -0.1) {
-        chassis.setLeftPower(RobotContainer.leftJoystick.getY());
+      if (RobotContainer.leftJoystick.getRawButtonPressed(1)){
+        chassis.setLeftPower(-RobotContainer.leftJoystick.getY() * 0.33);
+      }else{
+        chassis.setLeftPower(-RobotContainer.leftJoystick.getY());
+      }
     } else {
       chassis.setLeftPower(0);
     }
@@ -40,6 +49,8 @@ public class TankDrive extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    chassis.setRightPower(0);
+    chassis.setLeftPower(0);
   }
 
   // Returns true when the command should end.

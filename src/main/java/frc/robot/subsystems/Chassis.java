@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Chassis extends SubsystemBase {
@@ -23,6 +24,7 @@ public class Chassis extends SubsystemBase {
 
     rightRearMotor.follow(rightFrontMotor);
     leftRearMotor.follow(leftFrontMotor);
+
   }
 
   public void setRightPower(double rightPower) {
@@ -33,6 +35,14 @@ public class Chassis extends SubsystemBase {
     leftFrontMotor.set(TalonFXControlMode.PercentOutput, leftPower);
   }
 
+  public double getRightEncoder(){
+    return (rightFrontMotor.getSelectedSensorPosition() + rightRearMotor.getSelectedSensorPosition()) / 2;
+  }
+
+  public double getLeftEncoder(){
+    return (leftFrontMotor.getSelectedSensorPosition() + leftRearMotor.getSelectedSensorPosition()) / 2;
+  }
+
   public static Chassis getInstance() {
     if (chassis == null)
       chassis = new Chassis();
@@ -41,6 +51,7 @@ public class Chassis extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Right Encoder", getRightEncoder());
+    SmartDashboard.putNumber("Left Encoder", getLeftEncoder());
   }
 }
